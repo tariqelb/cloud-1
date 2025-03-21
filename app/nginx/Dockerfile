@@ -10,6 +10,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/CN=tel-bouh.1337.ma/O=Your Organization/C=MA"
 
 RUN /bin/mkdir -p /usr/share/nginx/html
+RUN /bin/mkdir -p /var/www/html
 
 COPY ./config/server.conf /etc/nginx/http.d/default.conf
 

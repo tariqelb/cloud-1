@@ -23,12 +23,12 @@ echo "}" >> /wp-config.php
 
 echo "require_once ABSPATH . 'wp-settings.php';" >> /wp-config.php
 
-#cp -rf /wp-config.php /usr/share/nginx/html/.
-#rm -rf /wordpress/wp-config.php
-#cp -rf /wordpress/* /usr/share/nginx/html/.
+cp -rf /wp-config.php /var/www/html/.
+
+chown -R www-data:www-data /var/www/html
 #chown -R nginx:nginx /usr/share/nginx
 #chown -R nginx:nginx /usr/share/nginx/html
 #chmod -R 744 /usr/share/nginx
-#php-fpm8 -F -R
 
-tail -f /dev/null
+php-fpm -F -R
+
