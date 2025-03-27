@@ -5,8 +5,10 @@ mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
 
 # Ensure MariaDB configuration allows network connections
-sed -i 's/^#bind-address/bind-address/' /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i 's/^bind-address\s*=.*/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sed -i 's/^#datadir/datadir/' /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i 's/^# port/port/' /etc/mysql/my.cnf
+sed -i 's/^# port/port/' /etc/mysql/mariadb.cnf
 
 # Initialize database if needed
 if [ ! -d "/var/lib/mysql/mysql" ]; then

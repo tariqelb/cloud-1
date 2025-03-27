@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "<?php" >> /wp-config.php
 echo "define(""'DB_NAME'"", ""'$DATABASE'"");" >>  /wp-config.php
-echo "define(""'DB_USER'"", ""'$USER'"");"  >>   /wp-config.php 
+echo "define(""'DB_USER'"", ""'$DB_USER'"");"  >>   /wp-config.php 
 echo "define(""'DB_PASSWORD'"", ""'$USER_PASSWORD'"");" >>  /wp-config.php
 echo "define(""'DB_HOST'"", ""'$HOST'"");"   >>  /wp-config.php
 echo "define(""'DB_CHAERSET'"", ""'utf8'"");" >> /wp-config.php
@@ -24,8 +24,12 @@ echo "}" >> /wp-config.php
 echo "require_once ABSPATH . 'wp-settings.php';" >> /wp-config.php
 
 cp -rf /wp-config.php /var/www/html/.
+rm -rf /var/www/html/wp-config-sample.php
+
+chmod -R 755 /var/www/html
 
 chown -R www-data:www-data /var/www/html
+
 #chown -R nginx:nginx /usr/share/nginx
 #chown -R nginx:nginx /usr/share/nginx/html
 #chmod -R 744 /usr/share/nginx

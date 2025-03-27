@@ -12,6 +12,10 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 RUN /bin/mkdir -p /usr/share/nginx/html
 RUN /bin/mkdir -p /var/www/html
 
+RUN chmod -R 744 /var/www/html
+RUN rm -rf /etc/nginx/conf.d/default.conf
+
 COPY ./config/server.conf /etc/nginx/http.d/default.conf
+COPY ./config/server.conf /etc/nginx/conf.d/default.conf
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
