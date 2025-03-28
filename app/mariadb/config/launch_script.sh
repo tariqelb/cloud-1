@@ -20,13 +20,6 @@ fi
 echo "Starting MariaDB..."
 mariadbd --datadir=/var/lib/mysql --user=mysql --socket=/run/mysqld/mysqld.sock &
 
-# Wait for MariaDB process to be fully started
-#while ! pgrep -x mariadbd >/dev/null; do
-#  echo "MariaDB process not found, waiting..."
-#  sleep 2
-#done
-
-echo "Mariadb process found ..."
 
 # Wait for MariaDB to fully start before running commands
 while ! netcat -z localhost 3306; do
@@ -38,7 +31,3 @@ echo "MariaDB is up and running!"
 
 # Execute database updates
 sh /updateDb.sh
-
-# Keep container running
-#tail -f /dev/null
-

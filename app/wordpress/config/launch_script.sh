@@ -8,13 +8,10 @@ echo "define(""'DB_CHAERSET'"", ""'utf8'"");" >> /wp-config.php
 echo "define(""'DB_COLLATE'"", ""'utf8_unicode_ci'"");" >> /wp-config.php
 
 echo '$table_prefix'" = 'wp_';" >> /wp-config.php
-echo 'define(""'WP-DEBUG'"", ""'true'"");'
+echo "define(""'WP_DEBUG'"", ""'true'"");" >> /wp-config.php
 
-#echo "define(""'WP_REDIS_HOST'"", ""'$REDIS_HOST'"");" >> /wp-config.php
-#echo "define(""'WP_REDIS_PORT'"", ""'$REDIS_PORT'"");" >> /wp-config.php
-#echo "define(""'WP_CACHE_KEY_SALT'"", ""'$DOMAIN_NAME'"");" >> /wp-config.php
-#echo "define(""'WP_REDIS_PASSWORD'"", ""'$RDS_PASSWORD'"");" >> /wp-config.php
-#echo "define(""'WP_CACHE'"", ""'true'"");"  >> /wp-config.php
+echo "define(""'WP_DEBUG_LOG'"", ""'true'"");" >> /wp-config.php
+
 
 
 echo "if ( ! defined( 'ABSPATH' ) ) {" >> /wp-config.php
@@ -29,10 +26,6 @@ rm -rf /var/www/html/wp-config-sample.php
 chmod -R 755 /var/www/html
 
 chown -R www-data:www-data /var/www/html
-
-#chown -R nginx:nginx /usr/share/nginx
-#chown -R nginx:nginx /usr/share/nginx/html
-#chmod -R 744 /usr/share/nginx
 
 php-fpm -F -R
 

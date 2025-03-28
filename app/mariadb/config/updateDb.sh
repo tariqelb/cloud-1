@@ -34,9 +34,12 @@ else
 
     echo "---------------------------------------"
 
-    /usr/bin/mariadb -u root --password="${ROOT_PASSWORD}" ${DATABASE} < /wplogindb.sql
+    /usr/bin/mariadb -u root --password="${ROOT_PASSWORD}" ${DATABASE} < ./wplogindb.sql
 fi
 
 # Restart MariaDB as mysql user
 pkill -9 mariadbd && mariadbd --datadir=/var/lib/mysql --user=mysql
+
+#To export login info from db after first login in wordpress use this command then move it to mariadb/config
+#docker exec mariadb /usr/bin/mysqldump -u root --password=${ROOT_PASSWORD} ${DATABASE} > wplogindb.sql
 
