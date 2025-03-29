@@ -4,13 +4,13 @@
 #USER_PASSWORD="cloud-1"
 #DATABASE="cloud1Database"
 #DB_USER="cloud-1-User"
-HOST="%"
+#HOST="%"
 
 commands1="ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}'; FLUSH PRIVILEGES;"
 
-commands2="CREATE DATABASE IF NOT EXISTS ${DATABASE} DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ; CREATE USER IF NOT EXISTS '${DB_USER}'@'${HOST}' IDENTIFIED BY '${USER_PASSWORD}'; FLUSH PRIVILEGES ;"
+commands2="CREATE DATABASE IF NOT EXISTS ${DATABASE} DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ; CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${USER_PASSWORD}'; FLUSH PRIVILEGES ;"
 
-commands3="GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'${HOST}' IDENTIFIED BY '${USER_PASSWORD}' ; FLUSH PRIVILEGES ;"
+commands3="GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'%' IDENTIFIED BY '${USER_PASSWORD}' ; FLUSH PRIVILEGES ;"
 
 echo "----------------launch mariadb--------------------"
 
@@ -31,6 +31,7 @@ else
 
     echo "${commands2}" | /usr/bin/mariadb -u root --password=${ROOT_PASSWORD}
     echo "${commands3}" | /usr/bin/mariadb -u root --password=${ROOT_PASSWORD}
+    echo "FLUSH PRIVILEGES ;" | /usr/bin/mariadb -u root --password=${ROOT_PASSWORD}
 
     echo "---------------------------------------"
 
