@@ -1,0 +1,6 @@
+---
+# Deplay app
+- import_playbook: deploy-app-locally-playbook.yaml
+# Check comatiners health
+- import_playbook: check-containers-health-playbook.yaml
+

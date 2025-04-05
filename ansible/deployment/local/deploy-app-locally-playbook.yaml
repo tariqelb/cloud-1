@@ -22,7 +22,7 @@
       git:
         repo: 'https://github.com/tariqelb/cloud-1.git'
         dest: '/home/tariq/Desktop/cloud-1-deploy-dir'
-        version: 'main'
+        version: 'master'
         update: yes
       when: repo_status.stat.exists == True
 
@@ -30,20 +30,4 @@
       make:
         chdir: '/home/tariq/Desktop/cloud-1-deploy-dir/app'
         target: all
-
-    - name: Check if containers are up and healthy
-      community.docker.docker_container_info:
-        name: your-container-name
-      register: container_status
-
-    - name: Show container status
-      debug:
-        msg: >-
-          {% if container_status.container is not defined %}
-            ❌ Container does not exist.
-          {% elif container_status.container.State.Running %}
-            ✅ Container is running.
-          {% else %}
-            ⚠️ Container exists but is not running.
-          {% endif %}
-
+ 

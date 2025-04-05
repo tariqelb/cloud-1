@@ -7,10 +7,14 @@ all:
 	mkdir -p $(HOME_DIR)/cloud-1-volume/wp $(HOME_DIR)/cloud-1-volume/db
 	docker-compose -f $(SRC) up -d
 
+stop:
+	docker-compose -f $(SRC) stop
+
 clean:
 	docker-compose -f $(SRC) down
-#To remove image also
-#	docker-compose -f $(SRC) down --rmi all
+
+lclean:
+	docker-compose -f $(SRC) down --rmi all
 
 fclean: clean
 	sudo rm -rf $(HOME_DIR)/cloud-1-volume
