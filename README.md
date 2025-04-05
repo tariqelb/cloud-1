@@ -3,4 +3,4 @@
 
 
 
-![Mandatory part](./sbject/Screenshot-2.png)
+![Mandatory part](./subject/Screenshot-2.png)
