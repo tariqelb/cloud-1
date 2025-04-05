@@ -1,0 +1,22 @@
+#inventory file
+#Group for cloud server
+aws_cloud:
+  hosts:
+    cloud1.example.com: {}
+#     ansible_host: 192.168.1.100
+#     ansible_user: tariqelb
+#     ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+#Group for localhost testing
+local_host:
+  hosts:
+    localhost:
+      ansible_connection: local 
+
+#Two parent groups
+prod:
+  children:
+    aws_cloud:
+test:
+  children:
+    local_host:

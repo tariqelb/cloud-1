@@ -1,0 +1,49 @@
+---
+- name: Deploy application locally
+  hosts: localhost
+  become: true
+  become_user: "{{ ansible_become_user }}" 
+  vars_files:
+    - secrets.yaml
+  tasks:
+    - name: Check if the repository is already cloned
+      stat:
+        path: '/home/tariq/Desktop/cloud-1-deploy-dir/.git'
+      register: repo_status
+
+    - name: Clone the repository if it does not exist
+      git:
+        repo: 'https://github.com/tariqelb/cloud-1.git'
+        dest: '/home/tariq/Desktop/cloud-1-deploy-dir'
+        version: 'master'
+      when: repo_status.stat.exists == False
+
+    - name: Pull latest changes if repository is already cloned
+      git:
+        repo: 'https://github.com/tariqelb/cloud-1.git'
+        dest: '/home/tariq/Desktop/cloud-1-deploy-dir'
+        version: 'main'
+        update: yes
+      when: repo_status.stat.exists == True
+
+    - name: Run Makefile to deploy the app
+      make:
+        chdir: '/home/tariq/Desktop/cloud-1-deploy-dir/app'
+        target: all
+
+    - name: Check if containers are up and healthy
+      community.docker.docker_container_info:
+        name: your-container-name
+      register: container_status
+
+    - name: Show container status
+      debug:
+        msg: >-
+          {% if container_status.container is not defined %}
+            ❌ Container does not exist.
+          {% elif container_status.container.State.Running %}
+            ✅ Container is running.
+          {% else %}
+            ⚠️ Container exists but is not running.
+          {% endif %}
+
