@@ -1,6 +1,6 @@
 
-![Introduction](./subject/screenshot-1.png)
+![Introduction](./subject/Screenshot-1.png)
 
 
 
-![Mandatory part](./sbject/screenshot-2.png)
+![Mandatory part](./sbject/Screenshot-2.png)
