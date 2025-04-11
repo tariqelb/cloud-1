@@ -1,0 +1,82 @@
+---
+# check docker and docker-compose installation
+- name: Check and install Docker and Docker Compose if not installed
+  hosts: localhost
+  become: true
+  become_user: "{{ ansible_become_user }}"
+  vars_files:
+    - secrets.yaml
+
+  tasks:
+    - name: Check Docker installation
+      command: docker --version
+      register: docker_installed
+      ignore_errors: yes
+
+    - name: Check Docker Compose installation
+      command: docker-compose --version
+      register: docker_compose_installed
+      ignore_errors: yes
+
+    - name: Display Docker check result
+      debug:
+        msg: >-
+          {% if docker_installed.rc == 0 %}
+            ✅ Docker is installed.
+          {% else %}
+            ❌ Docker is not installed.
+          {% endif %}
+
+    - name: Display Docker Compose check result
+      debug:
+        msg: >-
+          {% if docker_compose_installed.rc == 0 %}
+            ✅ Docker Compose is installed.
+          {% else %}
+            ❌ Docker Compose is not installed.
+          {% endif %}
+
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0
+
+    - name: Install required system packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - gnupg-agent
+        state: present
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0
+
+    - name: Install Docker and Docker Compose
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        state: latest
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: true
+      when: docker_installed.rc != 0 or docker_compose_installed.rc != 0

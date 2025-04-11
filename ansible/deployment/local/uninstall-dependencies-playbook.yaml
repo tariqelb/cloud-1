@@ -1,0 +1,47 @@
+---
+- name: Uninstall Docker and Docker Compose
+  hosts: localhost
+  become: true
+  become_user: "{{ ansible_become_user }}"
+  vars_files:
+    - secrets.yaml
+
+  tasks:
+    - name: Stop Docker service
+      service:
+        name: docker
+        state: stopped
+        enabled: no
+      ignore_errors: yes
+
+    - name: Remove Docker and related packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        state: absent
+        purge: yes
+
+    - name: Remove Docker APT repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        state: absent
+
+    - name: Remove Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: absent
+
+    - name: Remove Docker directories (optional)
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/docker
+        - /etc/docker
+        - /var/run/docker.sock
+        - /usr/local/bin/docker-compose
+      ignore_errors: yes
+
