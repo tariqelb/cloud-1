@@ -1,0 +1,7 @@
+project_id    = "sapient-tangent-456419-j5"
+region        = "us-central1"
+zone          = "us-central1-a"
+instance_name = "tariq-cloud-1-vm"
+os_image      = "ubuntu-os-cloud/ubuntu-2004-lts"
+ssh_user      = "tariq"
+ssh_key       = "/home/tariq/.ssh/id_rsa.pub"

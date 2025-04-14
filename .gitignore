@@ -1,3 +1,7 @@
 ansible-env/
 secrets.yaml
 .env
+env/
+*.tfstate
+*.tfstate.*
+.terraform/
