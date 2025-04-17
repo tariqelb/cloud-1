@@ -1,6 +1,6 @@
 ---
 - name: Check health of running containers
-  hosts: could1
+  hosts: cloud1
   become: true
   become_method: sudo
   vars_files:
@@ -20,15 +20,44 @@
       loop: "{{ container_names }}"
       failed_when: false
 
-    - name: Show container status
-      debug:
-        msg: >-
-          {% if item.container is not defined %}
-            ❌ Container {{ item.item }} does not exist.
-          {% elif item.container.State.Running %}
-            ✅ Container {{ item.item }} is running.
-          {% else %}
-            ⚠️ Container {{ item.item }} exists but is not running.
-          {% endif %}
+    - name: Build status messages list
+      set_fact:
+        container_status_messages: >-
+          {{
+            container_status_messages | default([]) +
+            [
+              (
+                item.container is not defined | ternary(
+                  '❌ Container ' ~ item.item ~ ' does not exist',
+                  (
+                    item.container.State.Running | ternary(
+                      '✅ Container ' ~ item.item ~ ' is running',
+                      '⚠️ Container ' ~ item.item ~ ' exists but is not running'
+                    )
+                  )
+                )
+              )
+            ]
+          }}
       loop: "{{ container_status.results }}"
+      no_log: yes
 
+    - name: Display container status report
+      block:
+        #- name: Print status header
+        #  debug:
+        #    msg: "📦 Container Status Report"
+        #  changed_when: false
+
+        - name: Show each container status
+          debug:
+            msg: "{{ item }}"
+          loop: "{{ container_status_messages }}"
+          loop_control:
+            label: "{{ item }}"
+
+        - name: Print summary
+          debug:
+            msg: "{{ container_status_messages | select('match','✅') | list | count }} running, {{ container_status_messages | select('match','⚠️') | list | count }} stopped, {{ container_status_messages | select('match','❌') | list | count }} missing"
+          changed_when: false
+          when: container_status_messages | length > 0

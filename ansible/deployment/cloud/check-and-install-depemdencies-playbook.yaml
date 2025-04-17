@@ -15,7 +15,7 @@
       no_log: true
 
     - name: Check Docker Compose installation
-      command: docker-compose --version
+      command: docker compose version
       register: docker_compose_installed
       ignore_errors: yes
       no_log: true

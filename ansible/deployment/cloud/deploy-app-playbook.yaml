@@ -24,6 +24,13 @@
         version: 'master'
         update: yes
       when: repo_status.stat.exists == True
+    
+    - name: Always copy .env_example to .env (overwrite if exists)
+      copy:
+        src: /home/tariq/Desktop/cloud-1-deploy-dir/app/.env_example
+        dest: /home/tariq/Desktop/cloud-1-deploy-dir/app/.env
+        remote_src: yes
+        force: yes
 
     - name: Run Makefile to deploy the app
       make:
