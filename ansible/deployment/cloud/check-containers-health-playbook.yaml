@@ -1,0 +1,34 @@
+---
+- name: Check health of running containers
+  hosts: could1
+  become: true
+  become_method: sudo
+  vars_files:
+    - secrets.yaml
+  vars:
+    container_names:
+      - nginx
+      - adminer
+      - wordpress
+      - mariadb
+
+  tasks:
+    - name: Check container info
+      community.docker.docker_container_info:
+        name: "{{ item }}"
+      register: container_status
+      loop: "{{ container_names }}"
+      failed_when: false
+
+    - name: Show container status
+      debug:
+        msg: >-
+          {% if item.container is not defined %}
+            ❌ Container {{ item.item }} does not exist.
+          {% elif item.container.State.Running %}
+            ✅ Container {{ item.item }} is running.
+          {% else %}
+            ⚠️ Container {{ item.item }} exists but is not running.
+          {% endif %}
+      loop: "{{ container_status.results }}"
+

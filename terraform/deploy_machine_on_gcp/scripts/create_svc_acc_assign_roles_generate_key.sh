@@ -7,11 +7,9 @@
 echo "Make sure you have run gcloud auth login and selected the correct project\n\n"
 
 #just adding some dummy seceruty
-read -sp "Enter sudo password" Password
+read -sp "Enter sudo password: " Password
 echo
-echo "MY_PROJECT_ID=sapient-tangent-456419-j5"
-echo
-read -sp "Enter your project id" PROJECT_ID
+read -p "Enter your project id: " PROJECT_ID
 echo
 
 # Exit on error
@@ -29,6 +27,13 @@ gcloud iam service-accounts create "${SERVICE_ACCOUNT_NAME}" \
   --description="Service account for Terraform automation" \
   --display-name="Cloud-1-service-account" \
   --project="${PROJECT_ID}" || echo "Service account may already exist, skipping."
+
+
+# Wait for service account to exist
+until gcloud iam service-accounts describe "$SERVICE_ACCOUNT_ID" --project "$PROJECT_ID" &> /dev/null; do
+  echo "Waiting for service account to be ready..."
+  sleep 2
+done
 
 # 2. Assign IAM roles
 echo "Assigning roles to service account..."
@@ -50,8 +55,11 @@ done
 echo "✅ Service account setup complete!"
 
 # 3. Generate and download service account key
-
-KEY_FILE="./env/cloud-1-key.json"
+#
+# Set key file path relative to this script location
+#KEY_FILE="./env/cloud-1-key.json"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KEY_FILE="$SCRIPT_DIR/../env/cloud-1-key.json"
 
 if [[ ! -f "$KEY_FILE" ]]; then
   echo "Generating service account key..."
@@ -68,3 +76,6 @@ export GOOGLE_APPLICATION_CREDENTIALS="$KEY_FILE"
 
 
 echo "✅ Key generated, downloaded and exported!."
+echo "Make sure is this env variable is exported"
+echo 'GOOGLE_APPLICATION_CREDENTIALS=/path-to-cloud-1-foulder/cloud-1/terraform/deploy_machine_on_gcp/env/cloud-1-key.json'
+'"

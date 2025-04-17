@@ -39,9 +39,12 @@ source ansible-env/bin/activate
 echo "Installing Ansible Docker tools in virtualenv..."
 pip install --upgrade pip
 pip install ansible docker
+pip install yq # yq user for generate inventory yaml file from json file
 
 echo "Installing community.docker Ansible collection..."
 ansible-galaxy collection install community.docker
 
+echo "deactivating virtual environment..."
+deactivate
 echo "------------------- Installation complete -------------------"
 

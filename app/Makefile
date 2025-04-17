@@ -5,16 +5,16 @@ HOME_DIR = $(HOME)
 all:
 	mkdir -p $(HOME_DIR)/cloud-1-volume
 	mkdir -p $(HOME_DIR)/cloud-1-volume/wp $(HOME_DIR)/cloud-1-volume/db
-	docker-compose -f $(SRC) up -d
+	docker compose -f $(SRC) up -d
 
 stop:
-	docker-compose -f $(SRC) stop
+	docker compose -f $(SRC) stop
 
 clean:
-	docker-compose -f $(SRC) down
+	docker compose -f $(SRC) down
 
 lclean:
-	docker-compose -f $(SRC) down --rmi all
+	docker compose -f $(SRC) down --rmi all
 
 fclean: clean
 	sudo rm -rf $(HOME_DIR)/cloud-1-volume

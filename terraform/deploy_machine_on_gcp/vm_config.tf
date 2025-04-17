@@ -19,6 +19,21 @@ resource "google_compute_instance" "vm_instance" {
 
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(abspath(var.ssh_key))}"
+    startup-script = <<EOT
+        #!/bin/bash
+        set -e
+
+        # Set the user password
+        echo "tariq:${var.ssh_password}" | chpasswd
+
+        # Remove tariq from google-sudoers if present
+        deluser tariq google-sudoers || true
+
+        # Create custom sudoers file that requires password
+        echo "tariq ALL=(ALL) ALL" > /etc/sudoers.d/tariq-requires-password
+        chmod 440 /etc/sudoers.d/tariq-requires-password
+      
+      EOT
   }
 
   tags = var.tags

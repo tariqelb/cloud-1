@@ -44,3 +44,8 @@ variable "ssh_key" {
   default     = "/home/tariq/.ssh/id_rsa.pub"
 }
 
+variable "ssh_password" {
+  description = "Sudo password"
+  type        = string
+}
+

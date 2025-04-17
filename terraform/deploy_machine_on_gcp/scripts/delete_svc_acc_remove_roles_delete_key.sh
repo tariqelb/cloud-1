@@ -16,7 +16,11 @@ read -p "Enter your project ID: " PROJECT_ID
 # Variables
 SERVICE_ACCOUNT_NAME="cloud-1-service-account"
 SERVICE_ACCOUNT_ID="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
-KEY_FILE="./env/cloud-1-key.json"
+
+# Set key file path relative to this script location
+#KEY_FILE="./env/cloud-1-key.json"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KEY_FILE="$SCRIPT_DIR/../env/cloud-1-key.json"
 
 # Roles to remove
 ROLES=(

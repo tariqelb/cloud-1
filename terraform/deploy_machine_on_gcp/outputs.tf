@@ -13,3 +13,7 @@ output "vm_instance_id" {
   value       = google_compute_instance.vm_instance.id
 }
 
+output "vm_user" {
+  description = "The SSH user for the VM"
+  value       = var.ssh_user
+}
