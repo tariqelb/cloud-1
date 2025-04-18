@@ -3,7 +3,7 @@
   hosts: cloud1
   become: true
   vars_files:
-    - secrets.yaml
+    - vm_external_ip.yaml
   tasks:
     - name: Check if the repository is already cloned
       stat:
@@ -36,4 +36,11 @@
       make:
         chdir: '/home/tariq/Desktop/cloud-1-deploy-dir/app'
         target: all
+    
+    - name: Add Cloud Vm external IP address to /etc/hosts
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ ExternalIP }} tel-bouh.1337.ma"
+        state: present
  

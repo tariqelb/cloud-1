@@ -1,9 +1,15 @@
 #!/bin/bash
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
 # Terraform outputs file path
 OUTPUTS="../../../terraform/deploy_machine_on_gcp/env/ansible_env_vars.json"
 
-echo "Generating inventory.yaml from Terraform outputs..."
+echo -e "${BLUE}Generating inventory.yaml from Terraform outputs...${NC}"
 
 # Activate Python environment (if needed)
 source ../../installation_script/ansible-env/bin/activate
@@ -22,8 +28,9 @@ cloud:
       ansible_ssh_private_key_file: "~/.ssh/id_rsa"
 EOF
 
+echo  "ExternalIP:  $vm_instance_ip"  > vm_external_ip.yaml
 # Deactivate Python environment (if activated)
 deactivate
 
-echo "inventory.yaml generated successfully!"
+echo -e "${GREEN}inventory.yaml generated successfully!${NC}"
 
